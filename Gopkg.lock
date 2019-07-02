@@ -3,19 +3,27 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:47d5242db7a7d1c3d80b024e1341a22684b4395b2de1bb364e58f30d007093ba"
+  digest = "1:15acb7298c824cd76cc082dc492fceac06984ff9ab73c65e63bca9b9a018d7a6"
   name = "github.com/djansyle/go-eventsource"
   packages = ["."]
   pruneopts = "UT"
-  revision = "235d02f19796e51f89f1e4baf6ae98c274239c5c"
+  revision = "a65454c8472f524d5e839f17641307a594934336"
 
 [[projects]]
   branch = "master"
-  digest = "1:795cfb8ac4755796b8e2e16a202e87e6ddb41fdce1f4815638e0655a68c9e34f"
+  digest = "1:07140f50620656933972875b84ccbf2d21cd257f4c41f65932aee74e64187c85"
   name = "github.com/djansyle/go-rabbit"
   packages = ["."]
   pruneopts = "UT"
-  revision = "e980ec83ec3aaf4625313454678cb5e77edbb3cc"
+  revision = "b83628dae45b12b0e706593c5ee9ed272606f572"
+
+[[projects]]
+  digest = "1:5b3b29ce0e569f62935d9541dff2e16cc09df981ebde48e82259076a73a3d0c7"
+  name = "github.com/op/go-logging"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "b2cb9fa56473e98db8caba80237377e83fe44db5"
+  version = "v1"
 
 [[projects]]
   digest = "1:274f67cb6fed9588ea2521ecdac05a6d62a8c51c074c1fccc6a49a40ba80e925"
@@ -39,6 +47,7 @@
   input-imports = [
     "github.com/djansyle/go-eventsource",
     "github.com/djansyle/go-rabbit",
+    "github.com/op/go-logging",
   ]
   solver-name = "gps-cdcl"
   solver-version = 1

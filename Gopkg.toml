@@ -36,3 +36,7 @@
 [[constraint]]
   branch = "master"
   name = "github.com/djansyle/go-eventsource"
+
+[[constraint]]
+  name = "github.com/op/go-logging"
+  version = "1.0.0"

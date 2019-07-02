@@ -43,7 +43,7 @@ func startEventstore(t *testing.T) {
 	server, err := rabbit.CreateServer("amqp://guest:guest@localhost:5672/", "EventStore")
 	assertNilError(t, err)
 
-	server.Register(new(EventStoreMock), true)
+	server.RegisterName("", new(EventStoreMock))
 
 	go server.Serve()
 }
@@ -56,9 +56,12 @@ func TestEventStore(t *testing.T) {
 
 	id := rabbit.RandomID()
 	result, err := rabbitEventStore.RetrieveEvents(&framework.RetrieveEventsOption{AggregateID: id})
-	t.Logf("%v", result)
 
 	assertNilError(t, err)
+
+	if len(result) == 0 {
+		t.Fatal("expecting return `result` to be more than 1")
+	}
 
 	if result[0].AggregateID != id {
 		t.Fatalf("expecting arrived event an event[0] to have an aggregate id of %s instead got %s", id, result[0].AggregateID)
