@@ -12,9 +12,10 @@ type RabbitEventStoreClient struct {
 	client rabbit.Sender
 }
 
+
 // NewRabbitEventStoreClient Creates a new instance of the rabbit client with the
 func NewRabbitEventStoreClient(opt *rabbit.CreateClientOption) (framework.EventStore, error) {
-	client, err := rabbit.CreateClient(opt)
+	client, err := rabbit.CreateClient(opt, requestFormatter)
 	if err != nil {
 		return nil, err
 	}
@@ -28,7 +29,8 @@ func (c *RabbitEventStoreClient) RetrieveEvents(opts *framework.RetrieveEventsOp
 		return nil, errors.New("rabbitmq not initialized")
 	}
 
-	err = c.client.Send(&Request{
+
+	err = c.client.Send(Request{
 		Action: "Events",
 		Data:   *opts,
 	}, &events)
@@ -38,7 +40,7 @@ func (c *RabbitEventStoreClient) RetrieveEvents(opts *framework.RetrieveEventsOp
 
 // CreateEvent send a new event to be saved to the event store
 func (c *RabbitEventStoreClient) CreateEvent(event framework.Event) (newEvent framework.Event, err error) {
-	err = c.client.Send(&Request{
+	err = c.client.Send(Request{
 		Action: "CreateEvent",
 		Data:   event,
 	}, &newEvent)
@@ -48,7 +50,7 @@ func (c *RabbitEventStoreClient) CreateEvent(event framework.Event) (newEvent fr
 
 // CreateSnapshot sends a message to the eventstore to create a snapshot
 func (c *RabbitEventStoreClient) CreateSnapshot(opts *framework.CreateSnapshotOption) (success bool, err error) {
-	err = c.client.Send(&Request{
+	err = c.client.Send(Request{
 		Action: "CreateSnapshot",
 		Data:   *opts,
 	}, &success)
@@ -58,7 +60,7 @@ func (c *RabbitEventStoreClient) CreateSnapshot(opts *framework.CreateSnapshotOp
 
 // RetrieveSnapshot retrieves a snapshot from the eventstore
 func (c *RabbitEventStoreClient) RetrieveSnapshot(opts *framework.RetrieveSnapshotOption) (snapshot framework.Snapshot, err error) {
-	err = c.client.Send(&Request{
+	err = c.client.Send(Request{
 		Action: "Snapshot",
 		Data:   *opts,
 	}, &snapshot)

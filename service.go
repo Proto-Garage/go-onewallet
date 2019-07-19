@@ -1,6 +1,7 @@
 package onewallet
 
 import (
+	"encoding/json"
 	"os"
 	"os/signal"
 	"syscall"
@@ -31,7 +32,7 @@ func (s *Service) Name() string {
 	return s.name
 }
 
-// Version exposos the version of the service
+// Version exposes the version of the service
 func (s *Service) Version() uint16 {
 	return s.version
 }
@@ -53,9 +54,28 @@ func (s *Service) Start() {
 	s.server.Serve()
 }
 
+func requestParser(body []byte) (request *rabbit.Request, err error) {
+	var owRequest RequestFormat
+
+	if err := json.Unmarshal(body, &owRequest); err != nil {
+		return nil, err
+	}
+
+	req, err := json.Marshal(owRequest.Arguments[0].Data)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &rabbit.Request{
+		Data: req,
+		Action: owRequest.Arguments[0].Action,
+	}, nil
+}
+
 // NewService creates a new instance of the service
 func NewService(opt NewServiceOpt) (*Service, error) {
-	server, err := rabbit.CreateServer(opt.URL, opt.Name)
+	server, err := rabbit.CreateServer(opt.URL, opt.Name, requestParser)
 	if err != nil {
 		return nil, err
 	}

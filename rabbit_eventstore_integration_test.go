@@ -1,6 +1,7 @@
 package onewallet
 
 import (
+	"encoding/json"
 	"testing"
 	"time"
 
@@ -36,11 +37,31 @@ func (*EventStoreMock) Snapshot(i framework.RetrieveSnapshotOption) (framework.S
 }
 
 func (*EventStoreMock) Events(i framework.RetrieveEventsOption) ([]framework.Event, *rabbit.ApplicationError) {
-	return []framework.Event{framework.Event{AggregateID: i.AggregateID, Type: "MockedEvent"}}, nil
+	return []framework.Event{{AggregateID: i.AggregateID, Type: "MockedEvent"}}, nil
+}
+
+func defaultRequestParser(body []byte) (*rabbit.Request, error) {
+	var request RequestFormat
+
+	if err := json.Unmarshal(body, &request); err != nil {
+		return nil, err
+	}
+
+	data, err := json.Marshal(request.Arguments[0].Data);
+
+	if err != nil {
+		return nil, err
+	}
+
+
+	return &rabbit.Request{
+		Action: request.Arguments[0].Action,
+		Data: data,
+	}, nil
 }
 
 func startEventstore(t *testing.T) {
-	server, err := rabbit.CreateServer("amqp://guest:guest@localhost:5672/", "EventStore")
+	server, err := rabbit.CreateServer("amqp://guest:guest@localhost:5672/", "EventStore", defaultRequestParser)
 	assertNilError(t, err)
 
 	server.RegisterName("", new(EventStoreMock))
@@ -57,8 +78,8 @@ func TestEventStore(t *testing.T) {
 	id := rabbit.RandomID()
 	result, err := rabbitEventStore.RetrieveEvents(&framework.RetrieveEventsOption{AggregateID: id})
 
-	assertNilError(t, err)
 
+	assertNilError(t, err)
 	if len(result) == 0 {
 		t.Fatal("expecting return `result` to be more than 1")
 	}

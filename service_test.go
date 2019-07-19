@@ -31,7 +31,7 @@ func TestService(t *testing.T) {
 
 	go service.Start()
 
-	client, err := rabbit.CreateClient(&rabbit.CreateClientOption{URL: "amqp://guest:guest@localhost:5672/", Queue: "Testing", TimeoutRequest: 2 * time.Second})
+	client, err := CreateClient(&rabbit.CreateClientOption{URL: "amqp://guest:guest@localhost:5672/", Queue: "Testing", TimeoutRequest: 2 * time.Second})
 	if err != nil {
 		t.Fatalf("expect `err` to be `nil` but got %q", err)
 	}
