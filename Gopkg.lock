@@ -3,11 +3,11 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:476ffb31bbdb915c23ef6cdccd6f73bf89b637b1450c08c9fdf4e2f5e7b14907"
+  digest = "1:f4fe9e20b9c587c29043306aed540965045fbee35aab211ea81cf1e9d994ef98"
   name = "github.com/djansyle/go-eventsource"
   packages = ["."]
   pruneopts = "UT"
-  revision = "a1ca34266c882c96ac26901288efeaf428b50e1f"
+  revision = "f0703027c6ea1ab771f1dc8fd41ddc937b8e2821"
 
 [[projects]]
   branch = "master"

@@ -47,7 +47,7 @@ func defaultRequestParser(body []byte) (*rabbit.Request, error) {
 		return nil, err
 	}
 
-	data, err := json.Marshal(request.Arguments[0].Data);
+	data, err := json.Marshal(request.Arguments[0].Data)
 
 	if err != nil {
 		return nil, err
